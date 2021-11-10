@@ -56,44 +56,69 @@ namespace WebAPI_IDH.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClientes(string id, Clientes clientes)
+        public async Task<object>PutClientes(string id, Clientes clientes)
         {
             if (id != clientes.Cliente)
             {
-                return BadRequest();
+                return new
+                {
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "id -> " + id + " no coincide con: " + clientes.Cliente,
+                };
             }
 
             _context.Entry(clientes).State = EntityState.Modified;
-
-            try
+            if(await _context.SaveChangesAsync() > 0)
             {
-                await _context.SaveChangesAsync();
+                //Actualizada
+                return new
+                {
+                    accion = "actualizar",
+                    estado = true,
+                    mensaje = "Cliente actualizado: " + clientes.Cliente,
+                };
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!ClientesExists(id))
+                //No se puedo actualizar
+                return new
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "No se puedo actualizar el cliente: " + clientes.Cliente,
+                };
             }
-
-            return NoContent();
         }
 
         // POST: api/Clientes
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Clientes>> PostClientes(Clientes clientes)
+        public async Task<object> PostClientes(Clientes clientes)
         {
             _context.Clientes.Add(clientes);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetClientes", new { id = clientes.Cliente }, clientes);
+            if(await _context.SaveChangesAsync() > 0)
+            {
+                //Crear
+                return new
+                {
+                    accion = "crear",
+                    estado = true,
+                    mensaje = "Cliente creado: " + clientes.Cliente,
+                };
+            }
+            else
+            {
+                return new
+                {
+                    accion = "crear",
+                    estado = false,
+                    mensaje = "No se ha podido crear el cliente: " + clientes.Cliente,
+                };
+            }
+            //return CreatedAtAction("GetClientes", new { id = clientes.Cliente }, clientes);
         }
 
         // DELETE: api/Clientes/5

@@ -30,15 +30,9 @@ namespace WebAPI_IDH.Controllers
 
         // GET: api/SlcReferencias/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SlcReferencia>> GetSlcReferencia(decimal id)
+        public async Task<object> GetSlcReferencia(string id)
         {
-            var slcReferencia = await _context.SlcReferencia.FindAsync(id);
-
-            if (slcReferencia == null)
-            {
-                return NotFound();
-            }
-
+            SlcReferencia slcReferencia = await _context.SlcReferencia.Where(c => c.CodsolicitudId == id).FirstOrDefaultAsync();
             return slcReferencia;
         }
 
@@ -55,59 +49,73 @@ namespace WebAPI_IDH.Controllers
         // PUT: api/SlcReferencias/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSlcReferencia(decimal id, SlcReferencia slcReferencia)
+        [HttpPut("{codSol_Numero}")]
+        public async Task<object> PutSlcReferencia(string codSol_Numero, SlcReferencia slcReferencia)
         {
-            if (id != slcReferencia.Id)
+            if (codSol_Numero != slcReferencia.CodsolicitudId)
             {
-                return BadRequest();
+                return new
+                {
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "slcReferencia -> " + codSol_Numero + " no coincide con: " + slcReferencia.CodsolicitudId,
+                };
             }
+
+            SlcReferencia slcSave = await _context.SlcReferencia.Where(c => c.CodsolicitudId == slcReferencia.CodsolicitudId).FirstOrDefaultAsync();
+            slcReferencia.Id = slcSave.Id;
+
+            _context.Entry(slcSave).State = EntityState.Detached;
 
             _context.Entry(slcReferencia).State = EntityState.Modified;
-
-            try
+            if (await _context.SaveChangesAsync() > 0)
             {
-                await _context.SaveChangesAsync();
+                //Actualizada
+                return new
+                {
+                    accion = "actualizar",
+                    estado = true,
+                    mensaje = "slcReferencia actualizada: " + slcReferencia.CodsolicitudId,
+                };
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!SlcReferenciaExists(id))
+                //No se puedo actualizar
+                return new
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "No se puedo actualizar la slcReferencia: " + slcReferencia.CodsolicitudId,
+                };
             }
-
-            return NoContent();
         }
 
         // POST: api/SlcReferencias
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<SlcReferencia>> PostSlcReferencia(SlcReferencia slcReferencia)
+        public async Task<object> PostSlcReferencia(SlcReferencia slcReferencia)
         {
             _context.SlcReferencia.Add(slcReferencia);
-            try
+            if (await _context.SaveChangesAsync() > 0)
             {
-                await _context.SaveChangesAsync();
+                //Crear
+                return new
+                {
+                    accion = "crear",
+                    estado = true,
+                    mensaje = "slcReferencia creada: " + slcReferencia.CodsolicitudId,
+                };
             }
-            catch (DbUpdateException)
+            else
             {
-                if (SlcReferenciaExists(slcReferencia.Id))
+                return new
                 {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                    accion = "crear",
+                    estado = false,
+                    mensaje = "No se ha podido crear la slcReferencia: " + slcReferencia.CodsolicitudId,
+                };
             }
-
-            return CreatedAtAction("GetSlcReferencia", new { id = slcReferencia.Id }, slcReferencia);
         }
 
         // DELETE: api/SlcReferencias/5

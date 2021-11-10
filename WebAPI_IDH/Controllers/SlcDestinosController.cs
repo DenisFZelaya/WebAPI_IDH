@@ -56,58 +56,67 @@ namespace WebAPI_IDH.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSlcDestinos(string id, SlcDestinos slcDestinos)
+        public async Task<object> PutSlcDestinos(string id, SlcDestinos slcDestinos)
         {
             if (id != slcDestinos.CodSolicitud)
             {
-                return BadRequest();
+                return new
+                {
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "slc_destino -> " + id + " no coincide con: " + slcDestinos.CodSolicitud,
+                };
             }
 
             _context.Entry(slcDestinos).State = EntityState.Modified;
-
-            try
+            if (await _context.SaveChangesAsync() > 0)
             {
-                await _context.SaveChangesAsync();
+                //Actualizada
+                return new
+                {
+                    accion = "actualizar",
+                    estado = true,
+                    mensaje = "slc_destino actualizada: " + slcDestinos.CodSolicitud,
+                };
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!SlcDestinosExists(id))
+                //No se puedo actualizar
+                return new
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "No se puedo actualizar la slc_destino: " + slcDestinos.CodSolicitud,
+                };
             }
-
-            return NoContent();
         }
 
         // POST: api/SlcDestinos
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<SlcDestinos>> PostSlcDestinos(SlcDestinos slcDestinos)
+        public async Task<object> PostSlcDestinos(SlcDestinos slcDestinos)
         {
             _context.SlcDestinos.Add(slcDestinos);
-            try
+            if (await _context.SaveChangesAsync() > 0)
             {
-                await _context.SaveChangesAsync();
+                //Crear
+                return new
+                {
+                    accion = "crear",
+                    estado = true,
+                    mensaje = "slc_destino creado: " + slcDestinos.CodSolicitud,
+                };
             }
-            catch (DbUpdateException)
+            else
             {
-                if (SlcDestinosExists(slcDestinos.CodSolicitud))
+                return new
                 {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                    accion = "crear",
+                    estado = false,
+                    mensaje = "No se ha podido crear el slc_destino: " + slcDestinos.CodSolicitud,
+                };
             }
-
-            return CreatedAtAction("GetSlcDestinos", new { id = slcDestinos.CodSolicitud }, slcDestinos);
         }
 
         // DELETE: api/SlcDestinos/5

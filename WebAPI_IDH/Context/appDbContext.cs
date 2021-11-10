@@ -7092,7 +7092,7 @@ namespace WebAPI_IDH.Context
 
             modelBuilder.Entity<SlcDestinos>(entity =>
             {
-                entity.HasKey(e => new { e.CodSolicitud, e.Destino })
+                entity.HasKey(e => new { e.CodSolicitud})
                     .HasName("slc_destinos_pkey");
 
                 entity.ToTable("slc_destinos");

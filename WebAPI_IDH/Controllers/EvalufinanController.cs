@@ -12,63 +12,64 @@ namespace WebAPI_IDH.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class SolicitudsController : ControllerBase
+    public class EvalufinanController : ControllerBase
     {
         private readonly appDbContext _context;
 
-        public SolicitudsController(appDbContext context)
+        public EvalufinanController(appDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Solicituds
+        // GET: api/Evalufinan
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Solicitud>>> GetSolicitud()
+        public async Task<ActionResult<IEnumerable<Evalufinan>>> GetEvalufinan()
         {
-            return await _context.Solicitud.ToListAsync();
+            return await _context.Evalufinan.ToListAsync();
         }
 
-        // GET: api/Solicituds/5
+        // GET: api/Evalufinan/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Solicitud>> GetSolicitud(string id)
+        public async Task<Evalufinan> GetEvalufinan(string id)
         {
-            var solicitud = await _context.Solicitud.FindAsync(id);
-
-            if (solicitud == null)
-            {
-                return NotFound();
-            }
-
-            return solicitud;
+            Evalufinan evalufinan = await _context.Evalufinan.Where(c => c.Codsolicitud == id).FirstOrDefaultAsync();
+            return evalufinan;
         }
 
-        // GET: api/Existe/5
-        [HttpGet("Existe/{Codsolicitud}")]
-        public object GetClientesExiste(string Codsolicitud)
+        [HttpGet("Existe/{codSolicitud}")]
+        public object GetEvaluFinanExiste(string codSolicitud)
         {
             return new
             {
-                existe = _context.Solicitud.Any(c => c.CodSolicitud == Codsolicitud)
+                existe = _context.Evalufinan.Any(c => c.Codsolicitud == codSolicitud)
             };
         }
 
-        // PUT: api/Solicituds/5
+        // PUT: api/Evalufinan/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<object> PutSolicitud(string id, Solicitud solicitud)
+        public async Task<object> PutEvalufinan(string id, Evalufinan evalufinan)
         {
-            if (id != solicitud.CodSolicitud)
+            
+
+            if (id != evalufinan.Codsolicitud)
             {
                 return new
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "codSolicitud -> " + id + " no coincide con: " + solicitud.CodSolicitud,
+                    mensaje = "codEvaluacionFinanciera -> " + id + " no coincide con: " + evalufinan.Codsolicitud,
                 };
             }
 
-            _context.Entry(solicitud).State = EntityState.Modified;
+            Evalufinan evaluSaved  = await _context.Evalufinan.Where(c => c.Codsolicitud == evalufinan.Codsolicitud).FirstOrDefaultAsync();
+            evalufinan.Idevalufin = evaluSaved.Idevalufin;
+
+            _context.Entry(evaluSaved).State = EntityState.Detached;
+
+
+            _context.Entry(evalufinan).State = EntityState.Modified;
             if (await _context.SaveChangesAsync() > 0)
             {
                 //Actualizada
@@ -76,7 +77,7 @@ namespace WebAPI_IDH.Controllers
                 {
                     accion = "actualizar",
                     estado = true,
-                    mensaje = "Solicitud actualizada: " + solicitud.CodSolicitud,
+                    mensaje = "Evaluacion Financiera actualizada: " + evalufinan.Codsolicitud,
                 };
             }
             else
@@ -86,18 +87,18 @@ namespace WebAPI_IDH.Controllers
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "No se puedo actualizar la solicitud: " + solicitud.CodSolicitud,
+                    mensaje = "No se puedo actualizar la Evaluacion Financiera: " + evalufinan.Codsolicitud,
                 };
             }
         }
 
-        // POST: api/Solicituds
+        // POST: api/Evalufinan
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<object> PostSolicitud(Solicitud solicitud)
+        public async Task<object> PostEvalufinan(Evalufinan evalufinan)
         {
-            _context.Solicitud.Add(solicitud);
+            _context.Evalufinan.Add(evalufinan);
             if (await _context.SaveChangesAsync() > 0)
             {
                 //Crear
@@ -105,7 +106,7 @@ namespace WebAPI_IDH.Controllers
                 {
                     accion = "crear",
                     estado = true,
-                    mensaje = "Solicitud creada: " + solicitud.CodSolicitud,
+                    mensaje = "Evalufinan creada: " + evalufinan.Codsolicitud,
                 };
             }
             else
@@ -114,30 +115,30 @@ namespace WebAPI_IDH.Controllers
                 {
                     accion = "crear",
                     estado = false,
-                    mensaje = "No se ha podido crear la solicitud: " + solicitud.CodSolicitud,
+                    mensaje = "No se ha podido crear Evalufinan: " + evalufinan.Codsolicitud,
                 };
             }
         }
 
-        // DELETE: api/Solicituds/5
+        // DELETE: api/Evalufinan/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Solicitud>> DeleteSolicitud(string id)
+        public async Task<ActionResult<Evalufinan>> DeleteEvalufinan(string id)
         {
-            var solicitud = await _context.Solicitud.FindAsync(id);
-            if (solicitud == null)
+            var evalufinan = await _context.Evalufinan.FindAsync(id);
+            if (evalufinan == null)
             {
                 return NotFound();
             }
 
-            _context.Solicitud.Remove(solicitud);
+            _context.Evalufinan.Remove(evalufinan);
             await _context.SaveChangesAsync();
 
-            return solicitud;
+            return evalufinan;
         }
 
-        private bool SolicitudExists(string id)
+        private bool EvalufinanExists(long id)
         {
-            return _context.Solicitud.Any(e => e.CodSolicitud == id);
+            return _context.Evalufinan.Any(e => e.Idevalufin == id);
         }
     }
 }

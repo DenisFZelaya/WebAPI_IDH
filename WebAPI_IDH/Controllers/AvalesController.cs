@@ -56,44 +56,67 @@ namespace WebAPI_IDH.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAvales(string id, Avales avales)
+        public async Task<object> PutAvales(string id, Avales avales)
         {
             if (id != avales.Aval)
             {
-                return BadRequest();
+                return new
+                {
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "id Aval -> " + id + " no coincide con: " + avales.Aval,
+                };
             }
 
             _context.Entry(avales).State = EntityState.Modified;
-
-            try
+            if (await _context.SaveChangesAsync() > 0)
             {
-                await _context.SaveChangesAsync();
+                //Actualizada
+                return new
+                {
+                    accion = "actualizar",
+                    estado = true,
+                    mensaje = "Aval actualizado: " + avales.Aval,
+                };
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!AvalesExists(id))
+                //No se puedo actualizar
+                return new
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "No se puedo actualizar el aval: " + avales.Aval,
+                };
             }
-
-            return NoContent();
         }
 
         // POST: api/Avales
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Avales>> PostAvales(Avales avales)
+        public async Task<Object> PostAvales(Avales avales)
         {
             _context.Avales.Add(avales);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAvales", new { id = avales.Aval }, avales);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                //Crear
+                return new
+                {
+                    accion = "crear",
+                    estado = true,
+                    mensaje = "Aval creado: " + avales.Aval,
+                };
+            }
+            else
+            {
+                return new
+                {
+                    accion = "crear",
+                    estado = false,
+                    mensaje = "No se ha podido crear el aval: " + avales.Aval,
+                };
+            }
         }
 
         // DELETE: api/Avales/5
