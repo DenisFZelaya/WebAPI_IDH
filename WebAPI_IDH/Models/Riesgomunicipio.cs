@@ -14,8 +14,8 @@ namespace WebAPI_IDH.Models
         public string Nombre { get; set; }
         public decimal Valor { get; set; }
         public decimal Kilometroscuadrados { get; set; }
-        public decimal Idriesgocategoria { get; set; }
         public decimal Totaldelitos { get; set; }
         public string Estado { get; set; }
+        public string TipoMantenimiento { get; set; }
     }
 }

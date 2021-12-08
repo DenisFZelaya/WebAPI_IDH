@@ -52,42 +52,56 @@ namespace WebAPI_IDH.Controllers
         [HttpPut("{codSol_Numero}")]
         public async Task<object> PutSlcReferencia(string codSol_Numero, SlcReferencia slcReferencia)
         {
-            if (codSol_Numero != slcReferencia.CodsolicitudId)
+            try
             {
+                if (codSol_Numero != slcReferencia.CodsolicitudId)
+                {
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "slcReferencia -> " + codSol_Numero + " no coincide con: " + slcReferencia.CodsolicitudId,
+                    };
+                }
+
+                SlcReferencia slcSave = await _context.SlcReferencia.Where(c => c.CodsolicitudId == slcReferencia.CodsolicitudId).FirstOrDefaultAsync();
+                slcReferencia.Id = slcSave.Id;
+
+                _context.Entry(slcSave).State = EntityState.Detached;
+
+                _context.Entry(slcReferencia).State = EntityState.Modified;
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    //Actualizada
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = true,
+                        mensaje = "slcReferencia actualizada: " + slcReferencia.CodsolicitudId,
+                    };
+                }
+                else
+                {
+                    //No se puedo actualizar
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "No se puedo actualizar la slcReferencia: " + slcReferencia.CodsolicitudId,
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+
                 return new
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "slcReferencia -> " + codSol_Numero + " no coincide con: " + slcReferencia.CodsolicitudId,
+                    mensaje = ex.Message,
                 };
             }
 
-            SlcReferencia slcSave = await _context.SlcReferencia.Where(c => c.CodsolicitudId == slcReferencia.CodsolicitudId).FirstOrDefaultAsync();
-            slcReferencia.Id = slcSave.Id;
-
-            _context.Entry(slcSave).State = EntityState.Detached;
-
-            _context.Entry(slcReferencia).State = EntityState.Modified;
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                //Actualizada
-                return new
-                {
-                    accion = "actualizar",
-                    estado = true,
-                    mensaje = "slcReferencia actualizada: " + slcReferencia.CodsolicitudId,
-                };
-            }
-            else
-            {
-                //No se puedo actualizar
-                return new
-                {
-                    accion = "actualizar",
-                    estado = false,
-                    mensaje = "No se puedo actualizar la slcReferencia: " + slcReferencia.CodsolicitudId,
-                };
-            }
         }
 
         // POST: api/SlcReferencias
@@ -96,26 +110,39 @@ namespace WebAPI_IDH.Controllers
         [HttpPost]
         public async Task<object> PostSlcReferencia(SlcReferencia slcReferencia)
         {
-            _context.SlcReferencia.Add(slcReferencia);
-            if (await _context.SaveChangesAsync() > 0)
+            try
             {
-                //Crear
-                return new
+                _context.SlcReferencia.Add(slcReferencia);
+                if (await _context.SaveChangesAsync() > 0)
                 {
-                    accion = "crear",
-                    estado = true,
-                    mensaje = "slcReferencia creada: " + slcReferencia.CodsolicitudId,
-                };
+                    //Crear
+                    return new
+                    {
+                        accion = "crear",
+                        estado = true,
+                        mensaje = "slcReferencia creada: " + slcReferencia.CodsolicitudId,
+                    };
+                }
+                else
+                {
+                    return new
+                    {
+                        accion = "crear",
+                        estado = false,
+                        mensaje = "No se ha podido crear la slcReferencia: " + slcReferencia.CodsolicitudId,
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "crear",
                     estado = false,
-                    mensaje = "No se ha podido crear la slcReferencia: " + slcReferencia.CodsolicitudId,
+                    mensaje = ex,
                 };
             }
+
         }
 
         // DELETE: api/SlcReferencias/5

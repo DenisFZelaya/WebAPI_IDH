@@ -23,5 +23,6 @@ namespace WebAPI_IDH.Models
         public string Email { get; set; }
         public string Codagencia { get; set; }
         public bool? SessionActiva { get; set; }
+        public long? Tipousuarioriesgo { get; set; }
     }
 }

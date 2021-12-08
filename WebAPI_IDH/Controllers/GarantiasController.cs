@@ -56,8 +56,40 @@ namespace WebAPI_IDH.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGarantias(string id, Garantias garantias)
+        public async Task<object> PutGarantias(string id, Garantias garantias)
         {
+            if (id != garantias.Aval)
+            {
+                return new
+                {
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "id -> " + id + " no coincide con: " + garantias.Aval,
+                };
+            }
+
+            _context.Entry(garantias).State = EntityState.Modified;
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                //Actualizada
+                return new
+                {
+                    accion = "actualizar",
+                    estado = true,
+                    mensaje = "Garantía actualizada: " + garantias.Aval,
+                };
+            }
+            else
+            {
+                //No se puedo actualizar
+                return new
+                {
+                    accion = "actualizar",
+                    estado = false,
+                    mensaje = "No se puedo actualizar la garantía: " + garantias.Aval,
+                };
+            }
+            /*
             if (id != garantias.Aval)
             {
                 return BadRequest();
@@ -82,18 +114,53 @@ namespace WebAPI_IDH.Controllers
             }
 
             return NoContent();
+            */
         }
 
         // POST: api/Garantias
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Garantias>> PostGarantias(Garantias garantias)
+        public async Task<object> PostGarantias(Garantias garantias)
         {
-            _context.Garantias.Add(garantias);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Garantias.Add(garantias);
 
-            return CreatedAtAction("GetGarantias", new { id = garantias.Aval }, garantias);
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    //Crear
+                    return new
+                    {
+                        accion = "crear",
+                        estado = true,
+                        mensaje = "Garantia creada: " + garantias.Aval,
+                    };
+                }
+                else
+                {
+                    return new
+                    {
+                        accion = "crear",
+                        estado = false,
+                        mensaje = "No se ha podido crear la garantía: " + garantias.Aval,
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new
+                {
+                    accion = "crear",
+                    estado = false,
+                    mensaje = ex.Message,
+                };
+            }
+
+            //_context.Garantias.Add(garantias);
+            //await _context.SaveChangesAsync();
+
+            //return CreatedAtAction("GetGarantias", new { id = garantias.Aval }, garantias);
         }
 
         // DELETE: api/Garantias/5

@@ -97,27 +97,40 @@ namespace WebAPI_IDH.Controllers
         [HttpPost]
         public async Task<object> PostClientes(Clientes clientes)
         {
-            _context.Clientes.Add(clientes);
-
-            if(await _context.SaveChangesAsync() > 0)
+            try
             {
-                //Crear
-                return new
+                _context.Clientes.Add(clientes);
+
+                if (await _context.SaveChangesAsync() > 0)
                 {
-                    accion = "crear",
-                    estado = true,
-                    mensaje = "Cliente creado: " + clientes.Cliente,
-                };
+                    //Crear
+                    return new
+                    {
+                        accion = "crear",
+                        estado = true,
+                        mensaje = "Cliente creado: " + clientes.Cliente,
+                    };
+                }
+                else
+                {
+                    return new
+                    {
+                        accion = "crear",
+                        estado = false,
+                        mensaje = "No se ha podido crear el cliente: " + clientes.Cliente,
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "crear",
                     estado = false,
-                    mensaje = "No se ha podido crear el cliente: " + clientes.Cliente,
+                    mensaje = ex.Message,
                 };
             }
+
             //return CreatedAtAction("GetClientes", new { id = clientes.Cliente }, clientes);
         }
 

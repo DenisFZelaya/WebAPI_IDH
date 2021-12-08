@@ -141,3 +141,4 @@ C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\obj\Release\netcoreapp3.1\We
 C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\obj\Release\netcoreapp3.1\WebAPI_IDH.dll
 C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\obj\Release\netcoreapp3.1\WebAPI_IDH.pdb
 C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\obj\Release\netcoreapp3.1\WebAPI_IDH.genruntimeconfig.cache
+C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\obj\Release\netcoreapp3.1\WebAPI_IDH.csproj.CopyComplete

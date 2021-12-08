@@ -13,5 +13,6 @@ namespace WebAPI_IDH.Models
         public string Nombre { get; set; }
         public decimal Valor { get; set; }
         public string Estado { get; set; }
+        public string Tipomantenimiento { get; set; }
     }
 }

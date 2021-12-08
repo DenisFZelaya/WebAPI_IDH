@@ -10,10 +10,11 @@ namespace WebAPI_IDH.Models
     public partial class Archivos
     {
         public int Idarchivo { get; set; }
-        public int Idconcepto { get; set; }
+        public int? Idconcepto { get; set; }
         public string Nombrearchivo { get; set; }
         public string Ubicacion { get; set; }
         public string Codsolicitud { get; set; }
         public string Fchcreado { get; set; }
+        public string CodsolicitudIdconcepto { get; set; }
     }
 }

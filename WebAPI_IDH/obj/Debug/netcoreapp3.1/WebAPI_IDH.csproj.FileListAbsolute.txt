@@ -141,3 +141,4 @@ C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\bin\Debug\netcoreapp3.1\runt
 C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\dzelaya\source\repos\WebAPI_IDH\WebAPI_IDH\obj\Debug\netcoreapp3.1\WebAPI_IDH.csproj.CopyComplete

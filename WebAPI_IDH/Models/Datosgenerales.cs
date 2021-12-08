@@ -20,5 +20,6 @@ namespace WebAPI_IDH.Models
         public long Datosgeneralesid { get; set; }
         public string Genero { get; set; }
         public long? Identificadorsujetoid { get; set; }
+        public string Estadovida { get; set; }
     }
 }

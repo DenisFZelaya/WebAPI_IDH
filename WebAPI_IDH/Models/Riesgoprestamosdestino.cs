@@ -7,13 +7,12 @@ using System.Collections.Generic;
 
 namespace WebAPI_IDH.Models
 {
-    public partial class Riesgoagencia
+    public partial class Riesgoprestamosdestino
     {
-        public string Idriesgoagencia { get; set; }
+        public string Idactividad { get; set; }
         public string Nombre { get; set; }
-        public string Departamento { get; set; }
-        public string Direccion { get; set; }
         public decimal Valor { get; set; }
         public string Estado { get; set; }
+        public string Tipomantenimiento { get; set; }
     }
 }
