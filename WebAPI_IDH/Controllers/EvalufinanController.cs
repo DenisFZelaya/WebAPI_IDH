@@ -51,45 +51,58 @@ namespace WebAPI_IDH.Controllers
         [HttpPut("{id}")]
         public async Task<object> PutEvalufinan(string id, Evalufinan evalufinan)
         {
-            
-
-            if (id != evalufinan.Codsolicitud)
+            try
             {
+                if (id != evalufinan.Codsolicitud)
+                {
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "codEvaluacionFinanciera -> " + id + " no coincide con: " + evalufinan.Codsolicitud,
+                    };
+                }
+
+                Evalufinan evaluSaved = await _context.Evalufinan.Where(c => c.Codsolicitud == evalufinan.Codsolicitud).FirstOrDefaultAsync();
+                evalufinan.Idevalufin = evaluSaved.Idevalufin;
+
+                _context.Entry(evaluSaved).State = EntityState.Detached;
+
+
+                _context.Entry(evalufinan).State = EntityState.Modified;
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    //Actualizada
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = true,
+                        mensaje = "Evaluacion Financiera actualizada: " + evalufinan.Codsolicitud,
+                    };
+                }
+                else
+                {
+                    //No se puedo actualizar
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "No se puedo actualizar la Evaluacion Financiera: " + evalufinan.Codsolicitud,
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+
                 return new
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "codEvaluacionFinanciera -> " + id + " no coincide con: " + evalufinan.Codsolicitud,
+                    mensaje = ex.Message,
                 };
             }
 
-            Evalufinan evaluSaved  = await _context.Evalufinan.Where(c => c.Codsolicitud == evalufinan.Codsolicitud).FirstOrDefaultAsync();
-            evalufinan.Idevalufin = evaluSaved.Idevalufin;
 
-            _context.Entry(evaluSaved).State = EntityState.Detached;
-
-
-            _context.Entry(evalufinan).State = EntityState.Modified;
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                //Actualizada
-                return new
-                {
-                    accion = "actualizar",
-                    estado = true,
-                    mensaje = "Evaluacion Financiera actualizada: " + evalufinan.Codsolicitud,
-                };
-            }
-            else
-            {
-                //No se puedo actualizar
-                return new
-                {
-                    accion = "actualizar",
-                    estado = false,
-                    mensaje = "No se puedo actualizar la Evaluacion Financiera: " + evalufinan.Codsolicitud,
-                };
-            }
         }
 
         // POST: api/Evalufinan
@@ -98,26 +111,39 @@ namespace WebAPI_IDH.Controllers
         [HttpPost]
         public async Task<object> PostEvalufinan(Evalufinan evalufinan)
         {
-            _context.Evalufinan.Add(evalufinan);
-            if (await _context.SaveChangesAsync() > 0)
+            try
             {
-                //Crear
-                return new
+                _context.Evalufinan.Add(evalufinan);
+                if (await _context.SaveChangesAsync() > 0)
                 {
-                    accion = "crear",
-                    estado = true,
-                    mensaje = "Evalufinan creada: " + evalufinan.Codsolicitud,
-                };
+                    //Crear
+                    return new
+                    {
+                        accion = "crear",
+                        estado = true,
+                        mensaje = "Evalufinan creada: " + evalufinan.Codsolicitud,
+                    };
+                }
+                else
+                {
+                    return new
+                    {
+                        accion = "crear",
+                        estado = false,
+                        mensaje = "No se ha podido crear Evalufinan: " + evalufinan.Codsolicitud,
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "crear",
                     estado = false,
-                    mensaje = "No se ha podido crear Evalufinan: " + evalufinan.Codsolicitud,
+                    mensaje = ex.Message
                 };
             }
+
         }
 
         // DELETE: api/Evalufinan/5

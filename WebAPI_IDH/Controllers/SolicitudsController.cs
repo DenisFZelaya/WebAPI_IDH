@@ -58,35 +58,47 @@ namespace WebAPI_IDH.Controllers
         [HttpPut("{id}")]
         public async Task<object> PutSolicitud(string id, Solicitud solicitud)
         {
-            if (id != solicitud.CodSolicitud)
+            try
             {
-                return new
+                if (id != solicitud.CodSolicitud)
                 {
-                    accion = "actualizar",
-                    estado = false,
-                    mensaje = "codSolicitud -> " + id + " no coincide con: " + solicitud.CodSolicitud,
-                };
-            }
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "codSolicitud -> " + id + " no coincide con: " + solicitud.CodSolicitud,
+                    };
+                }
 
-            _context.Entry(solicitud).State = EntityState.Modified;
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                //Actualizada
-                return new
+                _context.Entry(solicitud).State = EntityState.Modified;
+                if (await _context.SaveChangesAsync() > 0)
                 {
-                    accion = "actualizar",
-                    estado = true,
-                    mensaje = "Solicitud actualizada: " + solicitud.CodSolicitud,
-                };
+                    //Actualizada
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = true,
+                        mensaje = "Solicitud actualizada: " + solicitud.CodSolicitud,
+                    };
+                }
+                else
+                {
+                    //No se puedo actualizar
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "No se puedo actualizar la solicitud: " + solicitud.CodSolicitud,
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
-                //No se puedo actualizar
                 return new
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "No se puedo actualizar la solicitud: " + solicitud.CodSolicitud,
+                    mensaje = ex.Message,
                 };
             }
         }
@@ -97,26 +109,39 @@ namespace WebAPI_IDH.Controllers
         [HttpPost]
         public async Task<object> PostSolicitud(Solicitud solicitud)
         {
-            _context.Solicitud.Add(solicitud);
-            if (await _context.SaveChangesAsync() > 0)
+            try
             {
-                //Crear
-                return new
+                _context.Solicitud.Add(solicitud);
+                if (await _context.SaveChangesAsync() > 0)
                 {
-                    accion = "crear",
-                    estado = true,
-                    mensaje = "Solicitud creada: " + solicitud.CodSolicitud,
-                };
+                    //Crear
+                    return new
+                    {
+                        accion = "crear",
+                        estado = true,
+                        mensaje = "Solicitud creada: " + solicitud.CodSolicitud,
+                    };
+                }
+                else
+                {
+                    return new
+                    {
+                        accion = "crear",
+                        estado = false,
+                        mensaje = "No se ha podido crear la solicitud: " + solicitud.CodSolicitud,
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "crear",
                     estado = false,
-                    mensaje = "No se ha podido crear la solicitud: " + solicitud.CodSolicitud,
+                    mensaje = ex.Message,
                 };
             }
+
         }
 
         // DELETE: api/Solicituds/5

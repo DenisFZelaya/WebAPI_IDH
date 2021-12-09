@@ -4958,13 +4958,9 @@ namespace WebAPI_IDH.Context
                     .HasIdentityOptions(null, null, null, 999999L, null, null)
                     .UseIdentityAlwaysColumn();
 
-                entity.Property(e => e.Devicetype)
-                    .IsRequired()
-                    .HasColumnName("devicetype");
+                entity.Property(e => e.Devicetype).HasColumnName("devicetype");
 
-                entity.Property(e => e.Devincename)
-                    .IsRequired()
-                    .HasColumnName("devincename");
+                entity.Property(e => e.Devincename).HasColumnName("devincename");
 
                 entity.Property(e => e.Fecha)
                     .HasColumnName("fecha")
@@ -4974,45 +4970,25 @@ namespace WebAPI_IDH.Context
                     .HasColumnName("idasesor")
                     .HasColumnType("numeric");
 
-                entity.Property(e => e.Idiom)
-                    .IsRequired()
-                    .HasColumnName("idiom");
+                entity.Property(e => e.Idiom).HasColumnName("idiom");
 
-                entity.Property(e => e.Lineexc)
-                    .IsRequired()
-                    .HasColumnName("lineexc");
+                entity.Property(e => e.Lineexc).HasColumnName("lineexc");
 
-                entity.Property(e => e.Manufacturer)
-                    .IsRequired()
-                    .HasColumnName("manufacturer");
+                entity.Property(e => e.Manufacturer).HasColumnName("manufacturer");
 
-                entity.Property(e => e.Messageexc)
-                    .IsRequired()
-                    .HasColumnName("messageexc");
+                entity.Property(e => e.Messageexc).HasColumnName("messageexc");
 
-                entity.Property(e => e.Modeldevice)
-                    .IsRequired()
-                    .HasColumnName("modeldevice");
+                entity.Property(e => e.Modeldevice).HasColumnName("modeldevice");
 
-                entity.Property(e => e.Nameexc)
-                    .IsRequired()
-                    .HasColumnName("nameexc");
+                entity.Property(e => e.Nameexc).HasColumnName("nameexc");
 
-                entity.Property(e => e.Osrun)
-                    .IsRequired()
-                    .HasColumnName("osrun");
+                entity.Property(e => e.Osrun).HasColumnName("osrun");
 
-                entity.Property(e => e.Pageexc)
-                    .IsRequired()
-                    .HasColumnName("pageexc");
+                entity.Property(e => e.Pageexc).HasColumnName("pageexc");
 
-                entity.Property(e => e.Platform)
-                    .IsRequired()
-                    .HasColumnName("platform");
+                entity.Property(e => e.Platform).HasColumnName("platform");
 
-                entity.Property(e => e.Processexc)
-                    .IsRequired()
-                    .HasColumnName("processexc");
+                entity.Property(e => e.Processexc).HasColumnName("processexc");
             });
 
             modelBuilder.Entity<Factordecambio>(entity =>
@@ -5206,7 +5182,6 @@ namespace WebAPI_IDH.Context
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.AvalReferencia)
-                    .IsRequired()
                     .HasColumnName("aval_referencia")
                     .HasDefaultValueSql("' '::text");
 

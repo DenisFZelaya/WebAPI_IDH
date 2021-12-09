@@ -10,8 +10,8 @@ namespace WebAPI_IDH.Models
     public partial class ExcepcionesAppMovil
     {
         public long Id { get; set; }
-        public decimal Idasesor { get; set; }
-        public DateTime Fecha { get; set; }
+        public decimal? Idasesor { get; set; }
+        public DateTime? Fecha { get; set; }
         public string Nameexc { get; set; }
         public string Pageexc { get; set; }
         public string Lineexc { get; set; }

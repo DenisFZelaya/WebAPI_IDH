@@ -58,37 +58,50 @@ namespace WebAPI_IDH.Controllers
         [HttpPut("{id}")]
         public async Task<object> PutAvales(string id, Avales avales)
         {
-            if (id != avales.Aval)
+            try
+            {
+                if (id != avales.Aval)
+                {
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "id Aval -> " + id + " no coincide con: " + avales.Aval,
+                    };
+                }
+
+                _context.Entry(avales).State = EntityState.Modified;
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    //Actualizada
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = true,
+                        mensaje = "Aval actualizado: " + avales.Aval,
+                    };
+                }
+                else
+                {
+                    //No se puedo actualizar
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "No se puedo actualizar el aval: " + avales.Aval,
+                    };
+                }
+            }
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "id Aval -> " + id + " no coincide con: " + avales.Aval,
+                    mensaje = ex.Message,
                 };
             }
 
-            _context.Entry(avales).State = EntityState.Modified;
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                //Actualizada
-                return new
-                {
-                    accion = "actualizar",
-                    estado = true,
-                    mensaje = "Aval actualizado: " + avales.Aval,
-                };
-            }
-            else
-            {
-                //No se puedo actualizar
-                return new
-                {
-                    accion = "actualizar",
-                    estado = false,
-                    mensaje = "No se puedo actualizar el aval: " + avales.Aval,
-                };
-            }
         }
 
         // POST: api/Avales
@@ -97,26 +110,39 @@ namespace WebAPI_IDH.Controllers
         [HttpPost]
         public async Task<Object> PostAvales(Avales avales)
         {
-            _context.Avales.Add(avales);
-            if (await _context.SaveChangesAsync() > 0)
+            try
             {
-                //Crear
-                return new
+                _context.Avales.Add(avales);
+                if (await _context.SaveChangesAsync() > 0)
                 {
-                    accion = "crear",
-                    estado = true,
-                    mensaje = "Aval creado: " + avales.Aval,
-                };
+                    //Crear
+                    return new
+                    {
+                        accion = "crear",
+                        estado = true,
+                        mensaje = "Aval creado: " + avales.Aval,
+                    };
+                }
+                else
+                {
+                    return new
+                    {
+                        accion = "crear",
+                        estado = false,
+                        mensaje = "No se ha podido crear el aval: " + avales.Aval,
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "crear",
                     estado = false,
-                    mensaje = "No se ha podido crear el aval: " + avales.Aval,
+                    mensaje = ex.Message,
                 };
             }
+
         }
 
         // DELETE: api/Avales/5

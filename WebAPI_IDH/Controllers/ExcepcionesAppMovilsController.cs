@@ -48,30 +48,39 @@ namespace WebAPI_IDH.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutExcepcionesAppMovil(long id, ExcepcionesAppMovil excepcionesAppMovil)
         {
-            if (id != excepcionesAppMovil.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(excepcionesAppMovil).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                if (id != excepcionesAppMovil.Id)
+                {
+                    return BadRequest();
+                }
+
+                _context.Entry(excepcionesAppMovil).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ExcepcionesAppMovilExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!ExcepcionesAppMovilExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NoContent();
             }
 
-            return NoContent();
+
         }
 
         // POST: api/ExcepcionesAppMovils
