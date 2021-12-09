@@ -2216,12 +2216,10 @@ namespace WebAPI_IDH.Context
                     .HasColumnType("numeric(3,0)");
 
                 entity.Property(e => e.GpsLatitud)
-                    .IsRequired()
                     .HasColumnName("gps_latitud")
                     .HasDefaultValueSql("'14.0839154'::text");
 
                 entity.Property(e => e.GpsLongitud)
-                    .IsRequired()
                     .HasColumnName("gps_longitud")
                     .HasDefaultValueSql("'-87.205376'::text");
 
@@ -5200,10 +5198,10 @@ namespace WebAPI_IDH.Context
 
                 entity.Property(e => e.Anio)
                     .HasColumnName("anio")
-                    .HasColumnType("numeric(4,0)");
+                    .HasColumnType("numeric(4,0)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Aseguradora)
-                    .IsRequired()
                     .HasColumnName("aseguradora")
                     .HasDefaultValueSql("' '::text");
 
@@ -5214,21 +5212,21 @@ namespace WebAPI_IDH.Context
 
                 entity.Property(e => e.CantSemovientes)
                     .HasColumnName("cant_semovientes")
-                    .HasColumnType("numeric(11,0)");
+                    .HasColumnType("numeric(11,0)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Chasis)
-                    .IsRequired()
                     .HasColumnName("chasis")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Cilindraje)
-                    .IsRequired()
                     .HasColumnName("cilindraje")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.ClsGarantia)
                     .HasColumnName("cls_garantia")
-                    .HasColumnType("numeric(1,0)");
+                    .HasColumnType("numeric(1,0)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.CodAldea)
                     .HasColumnName("cod_aldea")
@@ -5241,27 +5239,22 @@ namespace WebAPI_IDH.Context
                     .HasDefaultValueSql("801");
 
                 entity.Property(e => e.CodCustodia)
-                    .IsRequired()
                     .HasColumnName("cod_custodia")
                     .HasDefaultValueSql("'  '::text");
 
                 entity.Property(e => e.Color)
-                    .IsRequired()
                     .HasColumnName("color")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.DescAvaluo)
-                    .IsRequired()
                     .HasColumnName("desc_avaluo")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.DescNotaria)
-                    .IsRequired()
                     .HasColumnName("desc_notaria")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.EmpreSaf)
-                    .IsRequired()
                     .HasColumnName("empre_saf")
                     .HasDefaultValueSql("'01'::text");
 
@@ -5287,32 +5280,26 @@ namespace WebAPI_IDH.Context
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Lugar)
-                    .IsRequired()
                     .HasColumnName("lugar")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Marca)
-                    .IsRequired()
                     .HasColumnName("marca")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Modelo)
-                    .IsRequired()
                     .HasColumnName("modelo")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Motor)
-                    .IsRequired()
                     .HasColumnName("motor")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.NomValuador)
-                    .IsRequired()
                     .HasColumnName("nom_valuador")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.NumContrato)
-                    .IsRequired()
                     .HasColumnName("num_contrato")
                     .HasDefaultValueSql("' '::text");
 
@@ -5322,51 +5309,43 @@ namespace WebAPI_IDH.Context
                     .HasDefaultValueSql("8");
 
                 entity.Property(e => e.NumIdentificacion)
-                    .IsRequired()
                     .HasColumnName("num_identificacion")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.NumPlaca)
-                    .IsRequired()
                     .HasColumnName("num_placa")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Raza)
-                    .IsRequired()
                     .HasColumnName("raza")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Responsable)
-                    .IsRequired()
                     .HasColumnName("responsable")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Serie)
-                    .IsRequired()
                     .HasColumnName("serie")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.TelAsegu)
-                    .IsRequired()
                     .HasColumnName("tel_asegu")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.TelCustodia)
-                    .IsRequired()
                     .HasColumnName("tel_custodia")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.TieneSeguro)
                     .HasColumnName("tiene_seguro")
-                    .HasColumnType("numeric(1,0)");
+                    .HasColumnType("numeric(1,0)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Tipo)
-                    .IsRequired()
                     .HasColumnName("tipo")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.TipoCobertura)
-                    .IsRequired()
                     .HasColumnName("tipo_cobertura")
                     .HasDefaultValueSql("'T'::text");
 
@@ -5377,29 +5356,31 @@ namespace WebAPI_IDH.Context
 
                 entity.Property(e => e.Tpbien)
                     .HasColumnName("tpbien")
-                    .HasColumnType("numeric(1,0)");
+                    .HasColumnType("numeric(1,0)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Tpgarantiam)
                     .HasColumnName("tpgarantiam")
-                    .HasColumnType("numeric(3,0)");
+                    .HasColumnType("numeric(3,0)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Tpidentificacion)
-                    .IsRequired()
                     .HasColumnName("tpidentificacion")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.ValorProyectado)
                     .HasColumnName("valor_proyectado")
-                    .HasColumnType("numeric(15,2)");
+                    .HasColumnType("numeric(15,2)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Vin)
-                    .IsRequired()
                     .HasColumnName("vin")
                     .HasDefaultValueSql("' '::text");
 
                 entity.Property(e => e.Zipcode)
                     .HasColumnName("zipcode")
-                    .HasColumnType("numeric(5,0)");
+                    .HasColumnType("numeric(5,0)")
+                    .HasDefaultValueSql("0");
             });
 
             modelBuilder.Entity<GrpEcon>(entity =>

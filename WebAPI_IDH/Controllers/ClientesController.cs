@@ -58,37 +58,50 @@ namespace WebAPI_IDH.Controllers
         [HttpPut("{id}")]
         public async Task<object>PutClientes(string id, Clientes clientes)
         {
-            if (id != clientes.Cliente)
+            try
+            {
+                if (id != clientes.Cliente)
+                {
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "id -> " + id + " no coincide con: " + clientes.Cliente,
+                    };
+                }
+
+                _context.Entry(clientes).State = EntityState.Modified;
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    //Actualizada
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = true,
+                        mensaje = "Cliente actualizado: " + clientes.Cliente,
+                    };
+                }
+                else
+                {
+                    //No se puedo actualizar
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "No se puedo actualizar el cliente: " + clientes.Cliente,
+                    };
+                }
+            }
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "id -> " + id + " no coincide con: " + clientes.Cliente,
+                    mensaje = ex.Message,
                 };
             }
 
-            _context.Entry(clientes).State = EntityState.Modified;
-            if(await _context.SaveChangesAsync() > 0)
-            {
-                //Actualizada
-                return new
-                {
-                    accion = "actualizar",
-                    estado = true,
-                    mensaje = "Cliente actualizado: " + clientes.Cliente,
-                };
-            }
-            else
-            {
-                //No se puedo actualizar
-                return new
-                {
-                    accion = "actualizar",
-                    estado = false,
-                    mensaje = "No se puedo actualizar el cliente: " + clientes.Cliente,
-                };
-            }
         }
 
         // POST: api/Clientes
@@ -100,7 +113,6 @@ namespace WebAPI_IDH.Controllers
             try
             {
                 _context.Clientes.Add(clientes);
-
                 if (await _context.SaveChangesAsync() > 0)
                 {
                     //Crear
@@ -130,7 +142,6 @@ namespace WebAPI_IDH.Controllers
                     mensaje = ex.Message,
                 };
             }
-
             //return CreatedAtAction("GetClientes", new { id = clientes.Cliente }, clientes);
         }
 

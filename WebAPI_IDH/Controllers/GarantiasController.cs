@@ -48,7 +48,7 @@ namespace WebAPI_IDH.Controllers
         {
             return new
             {
-                existe = _context.Avales.Any(c => c.Aval == aval)
+                existe = _context.Garantias.Any(c => c.Aval == aval)
             };
         }
 
@@ -58,37 +58,50 @@ namespace WebAPI_IDH.Controllers
         [HttpPut("{id}")]
         public async Task<object> PutGarantias(string id, Garantias garantias)
         {
-            if (id != garantias.Aval)
+            try
+            {
+                if (id != garantias.Aval)
+                {
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "id -> " + id + " no coincide con: " + garantias.Aval,
+                    };
+                }
+
+                _context.Entry(garantias).State = EntityState.Modified;
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    //Actualizada
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = true,
+                        mensaje = "Garantía actualizada: " + garantias.Aval,
+                    };
+                }
+                else
+                {
+                    //No se puedo actualizar
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "No se puedo actualizar la garantía: " + garantias.Aval,
+                    };
+                }
+            }
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "id -> " + id + " no coincide con: " + garantias.Aval,
+                    mensaje = ex.Message,
                 };
             }
 
-            _context.Entry(garantias).State = EntityState.Modified;
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                //Actualizada
-                return new
-                {
-                    accion = "actualizar",
-                    estado = true,
-                    mensaje = "Garantía actualizada: " + garantias.Aval,
-                };
-            }
-            else
-            {
-                //No se puedo actualizar
-                return new
-                {
-                    accion = "actualizar",
-                    estado = false,
-                    mensaje = "No se puedo actualizar la garantía: " + garantias.Aval,
-                };
-            }
             /*
             if (id != garantias.Aval)
             {

@@ -58,37 +58,50 @@ namespace WebAPI_IDH.Controllers
         [HttpPut("{id}")]
         public async Task<object> PutSlcDestinos(string id, SlcDestinos slcDestinos)
         {
-            if (id != slcDestinos.CodSolicitud)
+            try
+            {
+                if (id != slcDestinos.CodSolicitud)
+                {
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "slc_destino -> " + id + " no coincide con: " + slcDestinos.CodSolicitud,
+                    };
+                }
+
+                _context.Entry(slcDestinos).State = EntityState.Modified;
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    //Actualizada
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = true,
+                        mensaje = "slc_destino actualizada: " + slcDestinos.CodSolicitud,
+                    };
+                }
+                else
+                {
+                    //No se puedo actualizar
+                    return new
+                    {
+                        accion = "actualizar",
+                        estado = false,
+                        mensaje = "No se puedo actualizar la slc_destino: " + slcDestinos.CodSolicitud,
+                    };
+                }
+            }
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "actualizar",
                     estado = false,
-                    mensaje = "slc_destino -> " + id + " no coincide con: " + slcDestinos.CodSolicitud,
+                    mensaje = ex.Message,
                 };
             }
 
-            _context.Entry(slcDestinos).State = EntityState.Modified;
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                //Actualizada
-                return new
-                {
-                    accion = "actualizar",
-                    estado = true,
-                    mensaje = "slc_destino actualizada: " + slcDestinos.CodSolicitud,
-                };
-            }
-            else
-            {
-                //No se puedo actualizar
-                return new
-                {
-                    accion = "actualizar",
-                    estado = false,
-                    mensaje = "No se puedo actualizar la slc_destino: " + slcDestinos.CodSolicitud,
-                };
-            }
         }
 
         // POST: api/SlcDestinos
@@ -97,26 +110,39 @@ namespace WebAPI_IDH.Controllers
         [HttpPost]
         public async Task<object> PostSlcDestinos(SlcDestinos slcDestinos)
         {
-            _context.SlcDestinos.Add(slcDestinos);
-            if (await _context.SaveChangesAsync() > 0)
+            try
             {
-                //Crear
-                return new
+                _context.SlcDestinos.Add(slcDestinos);
+                if (await _context.SaveChangesAsync() > 0)
                 {
-                    accion = "crear",
-                    estado = true,
-                    mensaje = "slc_destino creado: " + slcDestinos.CodSolicitud,
-                };
+                    //Crear
+                    return new
+                    {
+                        accion = "crear",
+                        estado = true,
+                        mensaje = "slc_destino creado: " + slcDestinos.CodSolicitud,
+                    };
+                }
+                else
+                {
+                    return new
+                    {
+                        accion = "crear",
+                        estado = false,
+                        mensaje = "No se ha podido crear el slc_destino: " + slcDestinos.CodSolicitud,
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return new
                 {
                     accion = "crear",
                     estado = false,
-                    mensaje = "No se ha podido crear el slc_destino: " + slcDestinos.CodSolicitud,
+                    mensaje = ex.Message,
                 };
             }
+
         }
 
         // DELETE: api/SlcDestinos/5
