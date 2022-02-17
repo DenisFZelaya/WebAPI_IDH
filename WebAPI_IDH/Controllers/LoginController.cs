@@ -106,7 +106,7 @@ namespace WebAPI_IDH.Controllers
             });
 
             List<Clases> LClases = await _context.Clases.ToListAsync();
-            List<Destinos> LDestinos = await _context.Destinos.Where(c => c.Destino != c.DestinoPadre).Where(c => c.DestinoPadre != "1").OrderBy(c => c.Destino).ToListAsync();
+            List<Destinos> LDestinos = await _context.Destinos.Where(c => c.Destino != c.DestinoPadre).Where(c => c.DestinoPadre != " ").OrderBy(c => c.Destino).ToListAsync();
             List<Tpoperaciones> LtpOperaciones = await _context.Tpoperaciones.ToListAsync();
             List<ActividadFin> LactFin = await _context.ActividadFin.ToListAsync();
             List<Frecuenc> LFrecuencia = await _context.Frecuenc.ToListAsync();

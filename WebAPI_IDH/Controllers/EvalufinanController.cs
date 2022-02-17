@@ -111,10 +111,19 @@ namespace WebAPI_IDH.Controllers
         [HttpPost]
         public async Task<object> PostEvalufinan(Evalufinan evalufinan)
         {
+
+            
             try
             {
+                long idUltimo = _context.Evalufinan.Max(c => c.Idevalufin);
+                long idEva = idUltimo + 1;
+
+                evalufinan.Idevalufin = idEva;
+
+  
+
                 _context.Evalufinan.Add(evalufinan);
-                if (await _context.SaveChangesAsync() > 0)
+                if (_context.SaveChanges() > 0)
                 {
                     //Crear
                     return new
@@ -143,6 +152,7 @@ namespace WebAPI_IDH.Controllers
                     mensaje = ex.Message
                 };
             }
+            
 
         }
 

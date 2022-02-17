@@ -9,9 +9,10 @@ namespace WebAPI_IDH.Models
 {
     public partial class Riesgobitacora
     {
-        public decimal Idriesgobitacora { get; set; }
+        public int Idriesgobitacora { get; set; }
         public string Idusuario { get; set; }
         public string Fecha { get; set; }
+        public string Programa { get; set; }
         public string Accion { get; set; }
         public string Descripcion { get; set; }
         public string Estado { get; set; }
