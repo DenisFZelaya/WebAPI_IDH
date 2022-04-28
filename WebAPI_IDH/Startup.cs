@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 using WebAPI_IDH.Context;
 
 namespace WebAPI_IDH
-{
+{ 
+    //Version 1, ultimo commit 27/04/2022
     public class Startup
     {
         public Startup(IConfiguration configuration)
